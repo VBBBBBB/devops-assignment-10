@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: devops-assignment-10
+
+rule_files:
+  - "alert-rules.yml"
+
+scrape_configs:
+  # Prometheus scrapes itself.
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Node Exporter exposes host-level metrics (CPU, memory, load, filesystem).
+  - job_name: "node-exporter"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["node-exporter:9100"]

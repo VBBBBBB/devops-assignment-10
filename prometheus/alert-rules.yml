@@ -1,0 +1,29 @@
+groups:
+  - name: devops-demo-alerts
+    rules:
+      - alert: HighCpuUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU utilization has been above 80% for more than 2 minutes."
+
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory utilization has been above 85% for more than 2 minutes."
+
+      - alert: HostHighLoad
+        expr: node_load1 > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High system load on {{ $labels.instance }}"
+          description: "1-minute load average has exceeded 2 for more than 5 minutes."
